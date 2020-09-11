@@ -7,7 +7,7 @@ import gzip
 import os
 def writetogpx(f1, file):
   try:
-    content = [x.strip() for x in f1]
+    content = [str(x.strip()) for x in f1]
     content = [i for i in content if i.count("[") == 1 and i.count("]") == 1]
     content2 = []
     for x in content:

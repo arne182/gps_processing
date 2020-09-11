@@ -3,11 +3,10 @@ import gpxpy.gpx as gpx
 from rdp import rdp
 import numpy as np
 import datetime
+import gzip
 import os
-def writetogpx(file):
+def writetogpx(f1, file):
   try:
-    f = open(file,"r")
-    f1=f.readlines()
     content = [x.strip() for x in f1]
     content = [i for i in content if i.count("[") == 1 and i.count("]") == 1]
     content2 = []
@@ -38,5 +37,19 @@ def writetogpx(file):
 
 for root, subFolders, files in os.walk(folder):
   for file in files:
-    writetogpx(os.path.join(root,file))
+    if file.endswith(".gpx"):
+      continue
+    elif file.endswith(".gz"):
+      if os.path.exists(os.path.join(root,file[:-3]+'reduced.gpx')):
+        continue
+      with gzip.open(os.path.join(root,file), 'rb') as f:
+        f1 = f.readlines()
+        path = os.path.join(root,file)[:-3]
+    else:
+      if os.path.exists(os.path.join(root,file+'reduced.gpx')):
+        continue
+      f = open(os.path.join(root,file),"r")
+      f1=f.readlines()
+      path = os.path.join(root,file)
+    writetogpx(f1, path) 
 

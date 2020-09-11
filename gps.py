@@ -31,7 +31,7 @@ def writetogpx(file):
     gpx_track2.segments.append(gpx_segment2)
     for x in gps_acc:
       gpx_segment2.points.append(gpx.GPXTrackPoint(x[2], x[3], elevation=x[4], time=datetime.datetime.utcfromtimestamp(x[6])))
-    with open(file+'.gpx', "w") as f:
+    with open(file+'reduced.gpx', "w") as f:
       f.write(gpx2.to_xml())
   except:
     pass

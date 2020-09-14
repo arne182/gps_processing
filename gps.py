@@ -12,7 +12,10 @@ def writetogpx(f1, file):
     content2 = []
     for x in content:
       try:
-        content2.append(eval(x))
+        try:
+          content2.append(eval(x)).decode('ascii')
+        except AttributeError:
+          content2.append(eval(x))
       except ValueError:
         continue
     gps_acc = []

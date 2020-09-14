@@ -13,7 +13,8 @@ def writetogpx(f1, file):
     for x in content:
       try:
         try:
-          content2.append(eval(x)).decode('ascii')
+          c2 = eval(x).decode('ascii')
+          content2.append(eval(c2))
         except AttributeError:
           content2.append(eval(x))
       except ValueError:

@@ -55,7 +55,10 @@ for root, subFolders, files in os.walk(folder):
         continue
       print("Processing " + os.path.join(root,file))
       f = open(os.path.join(root,file),"r")
-      f1=f.readlines()
+      try:
+        f1=f.readlines()
+      except UnicodeDecodeError:
+        f1.pop()
       path = os.path.join(root,file)
     writetogpx(f1, path) 
 

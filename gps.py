@@ -19,14 +19,19 @@ def connectdatabase():
                speed DECIMAL(3,15),
                accuracy DECIMAL(3,15),
                osm_way_id DECIMAL(12,0),
+               file_id INTEGER,
                PRIMARY KEY(time, lat, lon))""")
+  conn.commit()
+  c.execute("""CREATE TABLE IF NOT EXISTS file(
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               file_name TEXT NOT NULL UNIQUE)""")
   conn.commit()
   return conn
 
-def writedatabase(conn, time, lat, lon, altitude, bearing, speed, accuracy, osm_way_id):
+def writedatabase(conn, time, lat, lon, altitude, bearing, speed, accuracy, osm_way_id, file_id):
   c = conn.cursor()
   try:
-    c.execute("INSERT INTO gps VALUES(" + time + "," + lat + "," + lon + "," + altitude + "," + bearing + "," + speed + "," + accuracy + "," + osm_way_id + ")")
+    c.execute("INSERT INTO gps VALUES(" + time + "," + lat + "," + lon + "," + altitude + "," + bearing + "," + speed + "," + accuracy + "," + osm_way_id  + "," + file_id + ")")
     conn.commit()
   except:
     pass
@@ -54,12 +59,17 @@ def writetogpx(f1, file, conn):
     gps_acc = np.array(gps_acc)
     gps_simple_mask = rdp(gps, epsilon=5e-6, return_mask=True)
     gps_acc = gps_acc[gps_simple_mask]
+    c = conn.cursor()
+    c.execute("INSERT INTO file (file_name) VALUES('" + file + "')")
+    conn.commit()
+    c.execute("SELECT id from file WHERE file_name='" + file + "'")
+    file_id = c.fetchall()[0][0]
     for x in gps_acc:
       if len(x) == 8:
         osm = x[7]
       else:
         osm = 0
-      writedatabase(conn,x[6],x[2],x[3],x[4],x[1],x[0],x[5],osm)
+      writedatabase(conn,x[6],x[2],x[3],x[4],x[1],x[0],x[5],osm, file_id)
     gpx2 = gpx.GPX()
     gpx_track2 = gpx.GPXTrack()
     gpx2.tracks.append(gpx_track2)

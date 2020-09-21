@@ -8,7 +8,7 @@ import gzip
 import os
 
 def connectdatabase():
-  conn = sqlite3.connect('L:\\reduced.db')
+  conn = sqlite3.connect('L:\\reduced.db', isolation_level=’DEFERRED’)
   c = conn.cursor()
   c.execute("""CREATE TABLE IF NOT EXISTS gps(
                time DECIMAL(12,8),
@@ -21,18 +21,15 @@ def connectdatabase():
                osm_way_id DECIMAL(12,0),
                file_id INTEGER,
                PRIMARY KEY(time, lat, lon))""")
-  conn.commit()
   c.execute("""CREATE TABLE IF NOT EXISTS file(
                id INTEGER PRIMARY KEY AUTOINCREMENT,
                file_name TEXT NOT NULL UNIQUE)""")
-  conn.commit()
   return conn
 
 def writedatabase(conn, time, lat, lon, altitude, bearing, speed, accuracy, osm_way_id, file_id):
   c = conn.cursor()
   try:
     c.execute("INSERT INTO gps VALUES(" + str(time) + "," + str(lat) + "," + str(lon) + "," + str(altitude) + "," + str(bearing) + "," + str(speed) + "," + str(accuracy) + "," + str(osm_way_id)  + "," + str(file_id) + ")")
-    conn.commit()
   except:
     pass
   return
@@ -62,7 +59,6 @@ def writetogpx(f1, file, conn):
     c = conn.cursor()
     try:
       c.execute("INSERT INTO file (file_name) VALUES('" + file + "')")
-      conn.commit()
     except:
       pass
     c.execute("SELECT id from file WHERE file_name='" + file + "'")

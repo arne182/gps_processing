@@ -8,7 +8,7 @@ import gzip
 import os
 
 def connectdatabase():
-  conn = sqlite3.connect('L:\\reduced.db', isolation_level=’DEFERRED’)
+  conn = sqlite3.connect('L:\\reduced.db', isolation_level='DEFERRED')
   c = conn.cursor()
   c.execute("""CREATE TABLE IF NOT EXISTS gps(
                time DECIMAL(12,8),

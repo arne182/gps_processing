@@ -31,7 +31,7 @@ def connectdatabase():
 def writedatabase(conn, time, lat, lon, altitude, bearing, speed, accuracy, osm_way_id, file_id):
   c = conn.cursor()
   try:
-    c.execute("INSERT INTO gps VALUES(" + time + "," + lat + "," + lon + "," + altitude + "," + bearing + "," + speed + "," + accuracy + "," + osm_way_id  + "," + file_id + ")")
+    c.execute("INSERT INTO gps VALUES(" + str(time) + "," + str(lat) + "," + str(lon) + "," + str(altitude) + "," + str(bearing) + "," + str(speed) + "," + str(accuracy) + "," + str(osm_way_id)  + "," + str(file_id) + ")")
     conn.commit()
   except:
     pass
@@ -60,13 +60,16 @@ def writetogpx(f1, file, conn):
     gps_simple_mask = rdp(gps, epsilon=5e-6, return_mask=True)
     gps_acc = gps_acc[gps_simple_mask]
     c = conn.cursor()
-    c.execute("INSERT INTO file (file_name) VALUES('" + file + "')")
-    conn.commit()
+    try:
+      c.execute("INSERT INTO file (file_name) VALUES('" + file + "')")
+      conn.commit()
+    except:
+      pass
     c.execute("SELECT id from file WHERE file_name='" + file + "'")
     file_id = c.fetchall()[0][0]
     for x in gps_acc:
       if len(x) == 8:
-        osm = x[7]
+        osm = int(x[7])
       else:
         osm = 0
       writedatabase(conn,x[6],x[2],x[3],x[4],x[1],x[0],x[5],osm, file_id)

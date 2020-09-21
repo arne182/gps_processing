@@ -58,6 +58,7 @@ def writetogpx(f1, file, conn):
     except:
       pass
     if len(gps_acc) == 0:
+      print("No accurate GPS points available!")
       return
     gps = [x[2:4] for x in gps_acc]
     gps_acc = np.array(gps_acc)
@@ -106,4 +107,5 @@ for root, subFolders, files in os.walk(folder):
         f1.pop()
       path = os.path.join(root,file)
     writetogpx(f1, path, conn) 
+
 conn.close()

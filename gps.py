@@ -52,15 +52,17 @@ def writetogpx(f1, file, conn):
     for x in content2:
       if x[5] < 2.0:
         gps_acc.append(x)
-    gps = [x[2:4] for x in gps_acc]
-    gps_acc = np.array(gps_acc)
-    gps_simple_mask = rdp(gps, epsilon=5e-6, return_mask=True)
-    gps_acc = gps_acc[gps_simple_mask]
     c = conn.cursor()
     try:
       c.execute("INSERT INTO file (file_name) VALUES('" + file + "')")
     except:
       pass
+    if len(gps_acc) == 0:
+      return
+    gps = [x[2:4] for x in gps_acc]
+    gps_acc = np.array(gps_acc)
+    gps_simple_mask = rdp(gps, epsilon=5e-6, return_mask=True)
+    gps_acc = gps_acc[gps_simple_mask]
     c.execute("SELECT id from file WHERE file_name='" + file + "'")
     file_id = c.fetchall()[0][0]
     for x in gps_acc:

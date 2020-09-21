@@ -55,8 +55,8 @@ def writetogpx(f1, file, conn):
     gps_simple_mask = rdp(gps, epsilon=5e-6, return_mask=True)
     gps_acc = gps_acc[gps_simple_mask]
     for x in gps_acc:
-      if len(x) = 8:
-        osm == x[7]
+      if len(x) == 8:
+        osm = x[7]
       else:
         osm = 0
       writedatabase(conn,x[6],x[2],x[3],x[4],x[1],x[0],x[5],osm)

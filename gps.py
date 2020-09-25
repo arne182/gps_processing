@@ -94,7 +94,10 @@ for root, subFolders, files in os.walk(folder):
         continue
       with gzip.open(os.path.join(root,file), 'rb') as f:
         print("Processing " + os.path.join(root,file))
-        f1 = f.readlines()
+        try:
+          f1 = f.readlines()
+        except:
+          continue
         path = os.path.join(root,file)[:-3]
     else:
       if os.path.exists(os.path.join(root,file+'reduced.gpx')):

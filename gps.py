@@ -96,7 +96,7 @@ for root, subFolders, files in os.walk(folder):
         if write_new_db:
           f = open(os.path.join(root,file[:-3]+'reduced.gpx'),"r")
           f1=f.readlines()
-          writetogpx(f1, os.path.join(root,os.path.join(root,file[:-3]+'reduced.gpx'), conn) 
+          writetogpx(f1, os.path.join(root,file[:-3]+'reduced.gpx'), conn) 
         continue
       with gzip.open(os.path.join(root,file), 'rb') as f:
         print("Processing " + os.path.join(root,file))

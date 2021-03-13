@@ -93,11 +93,8 @@ for root, subFolders, files in os.walk(folder):
       continue
     elif file.endswith(".gz"):
       if os.path.exists(os.path.join(root,file[:-3]+'reduced.gpx')):
-        if write_new_db:
-          f = open(os.path.join(root,file[:-3]+'reduced.gpx'),"r")
-          f1=f.readlines()
-          writetogpx(f1, os.path.join(root,file[:-3]+'reduced.gpx'), conn) 
-        continue
+        if not write_new_db:
+          continue
       with gzip.open(os.path.join(root,file), 'rb') as f:
         print("Processing " + os.path.join(root,file))
         try:
@@ -107,11 +104,8 @@ for root, subFolders, files in os.walk(folder):
         path = os.path.join(root,file)[:-3]
     else:
       if os.path.exists(os.path.join(root,file+'reduced.gpx')):
-        if write_new_db:
-          f = open(os.path.join(root,file+'reduced.gpx'),"r")
-          f1=f.readlines()
-          writetogpx(f1, os.path.join(root,file+'reduced.gpx'), conn) 
-        continue
+        if not write_new_db:
+          continue
       print("Processing " + os.path.join(root,file))
       f = open(os.path.join(root,file),"r")
       try:

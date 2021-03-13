@@ -7,8 +7,10 @@ import sqlite3
 import gzip
 import os
 
+write_new_db = False
+
 def connectdatabase():
-  conn = sqlite3.connect('L:\\reduced.db', isolation_level='DEFERRED')
+  conn = sqlite3.connect('L:\\reduced_new.db', isolation_level='DEFERRED')
   c = conn.cursor()
   c.execute("""CREATE TABLE IF NOT EXISTS gps(
                time DECIMAL(12,8),
@@ -91,6 +93,10 @@ for root, subFolders, files in os.walk(folder):
       continue
     elif file.endswith(".gz"):
       if os.path.exists(os.path.join(root,file[:-3]+'reduced.gpx')):
+        if write_new_db:
+          f = open(os.path.join(root,file[:-3]+'reduced.gpx'),"r")
+          f1=f.readlines()
+          writetogpx(f1, os.path.join(root,os.path.join(root,file[:-3]+'reduced.gpx'), conn) 
         continue
       with gzip.open(os.path.join(root,file), 'rb') as f:
         print("Processing " + os.path.join(root,file))
@@ -101,6 +107,10 @@ for root, subFolders, files in os.walk(folder):
         path = os.path.join(root,file)[:-3]
     else:
       if os.path.exists(os.path.join(root,file+'reduced.gpx')):
+        if write_new_db:
+          f = open(os.path.join(root,file+'reduced.gpx'),"r")
+          f1=f.readlines()
+          writetogpx(f1, os.path.join(root,file+'reduced.gpx'), conn) 
         continue
       print("Processing " + os.path.join(root,file))
       f = open(os.path.join(root,file),"r")

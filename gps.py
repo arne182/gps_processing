@@ -114,5 +114,6 @@ for root, subFolders, files in os.walk(folder):
         f1.pop()
       path = os.path.join(root,file)
     writetogpx(f1, path, conn) 
+    conn.commit()
 
 conn.close()
